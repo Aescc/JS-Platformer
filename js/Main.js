@@ -9,6 +9,7 @@ const isFunny = false;
 
 // Arrays
 var plats = [];
+var pBullets = [];
 
 // Objects
 var calc = new Calc();
@@ -39,6 +40,10 @@ function Init()
 	{
 		plats[0] = new Platform( 0,gfx.SCREEN_HEIGHT - 50,gfx.SCREEN_WIDTH,50 )
 	}
+	
+	for( var i = 0; i < 5; ++i )
+		pBullets[i] = new PlayerBullet();
+	
 	console.log( "JSJ Framework version " + version + " has been loaded successfully!" );
 }
 
@@ -55,6 +60,8 @@ function Update()
 			player.Land();
 		}
 	}
+	for( var i = 0; i < pBullets.length; ++i )
+		pBullets[i].Update();
 }
 
 function Draw()
@@ -64,4 +71,6 @@ function Draw()
 	for( var i = 0; i < plats.length; ++i )
 		plats[i].Draw();
 	player.Draw();
+	for( var i = 0; i < pBullets.length; ++i )
+		pBullets[i].Draw();
 }

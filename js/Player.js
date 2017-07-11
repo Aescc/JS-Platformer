@@ -13,14 +13,35 @@ class Player
 		var gravity = 0;
 		const gravityAcc = in_gravityAcc;
 		const OFFSET = WIDTH / 4;
+		var dirLastMoved = 1;
+		var shootTimer = 0;
+		const SHOOT_MAX = 7;
+		var currentBullet = 0;
 		//
 		this.Update = function()
 		{
 			if( kbd.KeyDown( 65 ) )
+			{
 				x -= SPEED;
+				dirLastMoved = -1;
+			}
 			if( kbd.KeyDown( 68 ) )
+			{
 				x += SPEED;
-			if( kbd.KeyDown( 32 ) && canJump )
+				dirLastMoved = 1;
+			}
+			++shootTimer;
+			if( kbd.KeyDown( 74 ) && shootTimer > SHOOT_MAX )
+			{
+				shootTimer = 0;
+				pBullets[currentBullet].SetDir( dirLastMoved );
+				pBullets[currentBullet].SetPos( x,y );
+				if( currentBullet < pBullets.length - 1 )
+					++currentBullet;
+				else
+					currentBullet = 0;
+			}
+			if( kbd.KeyDown( 75 ) && canJump )
 				jumping = true;
 			gravity += gravityAcc;
 			y += gravity;
