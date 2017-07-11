@@ -8,7 +8,7 @@ const gravity = 1;
 const isFunny = false;
 
 // Arrays
-var groundMap = [];
+var plats = [];
 
 // Objects
 var calc = new Calc();
@@ -20,7 +20,7 @@ var player = new Player( gravity );
 
 window.onload = function()
 {
-	const fps = 30;
+	const fps = 60;
 	setInterval( function()
 	{
 		Update();
@@ -36,16 +36,9 @@ function Init()
 	ms.Init( gfx.canvas );
 	gfx.SetSmoothing( true ); // Set false for pixel art.
 	document.getElementsByTagName( "title" )[0].innerHTML = "JSJ Framework " + version;
-	
-	for( var i = 0; i < gfx.SCREEN_HEIGHT / 50; ++i )
 	{
-		groundMap[i] = [];
-		for( var j = 0; j < gfx.SCREEN_WIDTH / 50; ++j )
-		{
-			groundMap[i][j] = calc.Random( 0,1 );
-		}
+		plats[0] = new Platform( 0,gfx.SCREEN_HEIGHT - 50,gfx.SCREEN_WIDTH,50 )
 	}
-	
 	console.log( "JSJ Framework version " + version + " has been loaded successfully!" );
 }
 
@@ -53,9 +46,14 @@ function Update()
 {
 	// Update things here.
 	player.Update();
-	// for( var i = 0; i < plats.length; ++i )
+	for( var i = 0; i < plats.length; ++i )
 	{
-		
+		while( player.HitTestBot( plats[i].GetPos().x,plats[i].GetPos().y,
+			plats[i].GetPos().w,plats[i].GetPos().h ) )
+		{
+			player.Move( 0,-1 );
+			player.Land();
+		}
 	}
 }
 
@@ -63,5 +61,7 @@ function Draw()
 {
 	gfx.Rect( 0,0,gfx.SCREEN_WIDTH,gfx.SCREEN_HEIGHT,"#000" );
 	// Draw things here.
+	for( var i = 0; i < plats.length; ++i )
+		plats[i].Draw();
 	player.Draw();
 }
