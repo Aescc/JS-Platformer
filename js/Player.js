@@ -13,7 +13,7 @@ class Player
 		const JUMP_POWER = 17;
 		var gravity = 0;
 		const gravityAcc = in_gravityAcc;
-		const OFFSET = WIDTH / 4;
+		const OFFSET = WIDTH / 4; // For smooth hit detection, smaller is more accurate.
 		var shootTimer = 0;
 		const SHOOT_MAX = 7;
 		var shootDir = 1;
@@ -51,9 +51,41 @@ class Player
 			while( y + HEIGHT > gfx.SCREEN_HEIGHT )
 				--y;
 		}
+		var MoveScreen = function()
+		{
+			// TODO: Optimize this, possibly with difference variables.
+			const xPos = x + WIDTH  / 2;
+			const yPos = y + HEIGHT / 2;
+			
+			// Lower values will dictate how fast the camera follows you, but make the screen jittery.
+			const offset = 15;
+			
+			var xDiff = xPos - gfx.SCREEN_WIDTH  / 2 - offset / 2;
+			var yDiff = yPos - gfx.SCREEN_HEIGHT / 2 - offset / 2;
+			// xDiff and yDiff are negative so the screen moves
+			//  the opposite direction you do.
+			xDiff = -xDiff / offset;
+			yDiff = -yDiff / offset;
+			MoveAll( xDiff,yDiff );
+			x += xDiff;
+			y += yDiff;
+			
+			if( 0 )
+			{
+				if( xPos < gfx.SCREEN_WIDTH / 2 )
+					MoveAll( 1,0 );
+				if( xPos > gfx.SCREEN_WIDTH / 2 )
+					MoveAll( -1,0 );
+				if( yPos < gfx.SCREEN_HEIGHT / 2 )
+					MoveAll( 0,1 );
+				if( yPos > gfx.SCREEN_HEIGHT / 2 )
+					MoveAll( 0,-1 );
+			}
+		}
 		//
 		this.Update = function()
 		{
+			// TODO: Make shooting and jumping take up the same bar.
 			++shootTimer;
 			if( kbd.KeyDown( 74 ) )
 			{
@@ -92,6 +124,7 @@ class Player
 			if( jumping )
 				y -= JUMP_POWER;
 			CheckBounds();
+			MoveScreen();
 		}
 		this.Draw = function()
 		{
@@ -107,13 +140,40 @@ class Player
 			gravity = 0;
 			jumping = false;
 		}
-		this.HitTestBot = function( objX,objY,objWidth,objHeight )
+		this.HitTest = function( hitDir,objX,objY,objWidth,objHeight )
 		{
-			if( x + OFFSET < objX + objWidth && x + WIDTH - OFFSET > objX &&
-			y + HEIGHT - OFFSET < objY + objHeight && y + HEIGHT > objY )
-				return true;
-			else
-				return false;
+			if( hitDir === "Top" )
+			{
+				if( x + OFFSET < objX + objWidth && x + WIDTH - OFFSET > objX &&
+					y < objY + objHeight && y + OFFSET > objY )
+					return true;
+				else
+					return false;
+			}
+			else if( hitDir === "Bot" )
+			{
+				if( x + OFFSET < objX + objWidth && x + WIDTH - OFFSET > objX &&
+					y + HEIGHT - OFFSET < objY + objHeight && y + HEIGHT > objY )
+					return true;
+				else
+					return false;
+			}
+			else if( hitDir === "Left" )
+			{
+				if( x < objX + objWidth && x + OFFSET > objX &&
+					y + OFFSET < objY + objHeight && y + HEIGHT - OFFSET > objY )
+					return true;
+				else
+					return false;
+			}
+			else if( hitDir === "Right" )
+			{
+				if( x + WIDTH - OFFSET < objX + objWidth && x + WIDTH > objX &&
+					y + OFFSET < objY + objHeight && y + HEIGHT - OFFSET > objY )
+					return true;
+				else
+					return false;
+			}
 		}
 	}
 }

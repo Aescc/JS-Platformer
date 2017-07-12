@@ -38,7 +38,8 @@ function Init()
 	gfx.SetSmoothing( true ); // Set false for pixel art.
 	document.getElementsByTagName( "title" )[0].innerHTML = "JSJ Framework " + version;
 	{
-		plats[0] = new Platform( 0,gfx.SCREEN_HEIGHT - 50,gfx.SCREEN_WIDTH,50 )
+		plats[0] = new Platform( 0,gfx.SCREEN_HEIGHT - 50,gfx.SCREEN_WIDTH,50 );
+		plats[1] = new Platform( -90,300,300,50 );
 	}
 	
 	for( var i = 0; i < 10; ++i ) // i must be odd.
@@ -53,12 +54,21 @@ function Update()
 	player.Update();
 	for( var i = 0; i < plats.length; ++i )
 	{
-		while( player.HitTestBot( plats[i].GetPos().x,plats[i].GetPos().y,
+		while( player.HitTest( "Bot",plats[i].GetPos().x,plats[i].GetPos().y,
 			plats[i].GetPos().w,plats[i].GetPos().h ) )
 		{
 			player.Move( 0,-1 );
 			player.Land();
 		}
+		while( player.HitTest( "Top",plats[i].GetPos().x,plats[i].GetPos().y,
+			plats[i].GetPos().w,plats[i].GetPos().h ) )
+			player.Move( 0,1 );
+		while( player.HitTest( "Left",plats[i].GetPos().x,plats[i].GetPos().y,
+			plats[i].GetPos().w,plats[i].GetPos().h ) )
+			player.Move( 1,0 );
+		while( player.HitTest( "Right",plats[i].GetPos().x,plats[i].GetPos().y,
+			plats[i].GetPos().w,plats[i].GetPos().h ) )
+			player.Move( -1,0 );
 	}
 	for( var i = 0; i < pBullets.length; ++i )
 		pBullets[i].Update();
