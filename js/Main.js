@@ -41,7 +41,7 @@ function Init()
 		plats[0] = new Platform( 0,gfx.SCREEN_HEIGHT - 50,gfx.SCREEN_WIDTH,50 )
 	}
 	
-	for( var i = 0; i < 5; ++i )
+	for( var i = 0; i < 10; ++i ) // i must be odd.
 		pBullets[i] = new PlayerBullet();
 	
 	console.log( "JSJ Framework version " + version + " has been loaded successfully!" );
@@ -70,7 +70,15 @@ function Draw()
 	// Draw things here.
 	for( var i = 0; i < plats.length; ++i )
 		plats[i].Draw();
-	player.Draw();
 	for( var i = 0; i < pBullets.length; ++i )
 		pBullets[i].Draw();
+	player.Draw();
+}
+
+function MoveAll( xMove,yMove )
+{
+	for( var i = 0; i < plats.length; ++i )
+		plats[i].Move( xMove,yMove );
+	for( var i = 0; i < pBullets.length; ++i )
+		pBullets[i].Move( xMove,yMove );
 }

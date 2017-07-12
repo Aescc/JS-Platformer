@@ -11,6 +11,11 @@ class Platform
 		{
 			gfx.Rect( x,y,WIDTH,HEIGHT,"#555" );
 		}
+		this.Move = function( xMove,yMove )
+		{
+			x += xMove;
+			y += yMove;
+		}
 		this.GetPos = function()
 		{
 			return {
