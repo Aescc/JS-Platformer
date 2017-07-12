@@ -71,7 +71,17 @@ function Update()
 			player.Move( -1,0 );
 	}
 	for( var i = 0; i < pBullets.length; ++i )
+	{
 		pBullets[i].Update();
+		for( var j = 0; j < plats.length; ++j )
+		{
+			if( calc.HitTest( plats[j].GetPos().x,plats[j].GetPos().y,
+				plats[j].GetPos().w,plats[j].GetPos().h,
+				pBullets[i].GetPos().x,pBullets[i].GetPos().y,
+				pBullets[i].GetPos().w,pBullets[i].GetPos().h ) )
+				pBullets[i].Dest();
+		}
+	}
 }
 
 function Draw()

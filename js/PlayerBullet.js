@@ -46,5 +46,19 @@ class PlayerBullet
 		{
 			moveStyle = in_moveStyle;
 		}
+		this.Dest = function()
+		{
+			x = 9999;
+			y = 9999;
+		}
+		this.GetPos = function()
+		{
+			return {
+				x:	x,
+				y:	y,
+				w:	WIDTH,
+				h:	HEIGHT
+			}
+		}
 	}
 }

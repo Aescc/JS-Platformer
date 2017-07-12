@@ -15,7 +15,7 @@ class Player
 		const gravityAcc = in_gravityAcc;
 		const OFFSET = WIDTH / 4; // For smooth hit detection, smaller is more accurate.
 		var shootTimer = 0;
-		const SHOOT_MAX = 7;
+		const SHOOT_MAX = 10; // Lower is faster.
 		var shootDir = 1;
 		var currentBullet = 0;
 		//
