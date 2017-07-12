@@ -1,0 +1,124 @@
+<!dOcTyPe html>
+
+<html>
+<head>
+	<title>Map Editor</title>
+</head>
+
+<body bgcolor="#333">
+	
+	<canvas id="editor" width="1125" height="825"></canvas>
+	<button onclick="javascript:Download()">Download</button>
+	
+	<script>
+	var c = document.getElementById( "editor" );
+	var cc = c.getContext( "2d" );
+	
+	var isDown = false;
+	var mouse = { x: 0,y: 0 };
+	var drawX = mouse.x;
+	var drawY = mouse.y;
+	var erasing = false;
+	
+	var map = [];
+	for( var i = 0; i < 11 * 3; ++i )
+	{
+		map[i] = [];
+		for( var j = 0; j < 15 * 3; ++j )
+			map[i][j] = 0;
+	}
+	
+	window.onload = function()
+	{
+		setInterval( function()
+		{
+			Update();
+			Draw();
+		},1000/60 );
+		c.addEventListener( 'mousedown',function()
+		{
+			isDown = true;
+		} );
+		c.addEventListener( 'mouseup',function()
+		{
+			isDown = false;
+		} );
+		c.addEventListener( 'mousemove',function( e )
+		{
+			const rect = c.getBoundingClientRect();
+			const root = document.documentElement;
+			mouse.x = e.clientX - rect.left - root.scrollLeft;
+			mouse.y = e.clientY - rect.top - root.scrollTop;
+		} );
+		document.addEventListener( "keydown",KD );
+	}
+	
+	function Update()
+	{
+		drawX = Number( mouse.x );
+		drawY = Number( mouse.y );
+		while( drawX % 25 !== 0 )
+			--drawX;
+		while( drawY % 25 !== 0 )
+			--drawY;
+		if( isDown )
+		{
+			var drawColor = 0;
+			if( !erasing )
+				drawColor = 1;
+			else
+				drawColor = 0;
+			map[drawY / 25][drawX / 25] = drawColor;
+		}
+	}
+	
+	function Draw()
+	{
+		for( var i = 0; i < map.length; ++i )
+		{
+			for( var j = 0; j < map[i].length; ++j )
+			{
+				if( map[i][j] === 0 )
+					cc.fillStyle = "#000";
+				else if( map[i][j] === 1 )
+					cc.fillStyle = "#555";
+				cc.fillRect( j * 25,i * 25,25,25 );
+			}
+		}
+		if( !erasing )
+			cc.fillStyle = "#0FF";
+		else
+			cc.fillStyle = "#F00";
+		cc.fillRect( drawX,drawY,25,25 );
+	}
+	
+	function KD( e )
+	{
+		if( e.keyCode == 69 )
+			erasing = true;
+		else if( e.keyCode == 66 )
+			erasing = false;
+	}
+	
+	function Download()
+	{
+		const downloadName = "Map";
+		var downloadData = "var map =\n[\n";
+		for( var i = 0; i < 11 * 3; ++i )
+		{
+			downloadData += "\t[ ";
+			for( var j = 0; j < 15 * 3; ++j )
+				downloadData += map[i][j] + ",";
+			downloadData += " ],\n";
+		}
+		downloadData = downloadData.substring( 0,downloadData.length - 2 );
+		downloadData += "\n];";
+		var download = document.createElement( "a" );
+		download.setAttribute( 'href','data:text/plain;charset=utf-8,' + encodeURIComponent( downloadData ) );
+		download.download = downloadName + ".js";
+		download.click();
+	}
+	</script>
+	
+</body>
+</html>

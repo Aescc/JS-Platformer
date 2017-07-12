@@ -22,9 +22,9 @@ class Player
 		var Shoot = function()
 		{
 			shootTimer = 0;
-			pBullets[currentBullet]  .SetDir( shootDir );
-			pBullets[currentBullet]  .SetPos( x,y + WIDTH / 2 );
-			pBullets[currentBullet]  .SetMoveStyle( 1 );
+			pBullets[currentBullet].SetDir( shootDir );
+			pBullets[currentBullet].SetPos( x,y + WIDTH / 2 );
+			pBullets[currentBullet].SetMoveStyle( 1 );
 			
 			if( currentBullet < pBullets.length - 1 )
 				++currentBullet;
@@ -119,7 +119,8 @@ class Player
 				if( gravity > JUMP_POWER ) // Enable multi-jumps.
 					gravity = 0;
 			}
-			gravity += gravityAcc;
+			if( gravity < 50 )
+				gravity += gravityAcc;
 			y += gravity;
 			if( jumping )
 				y -= JUMP_POWER;

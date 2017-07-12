@@ -43,11 +43,11 @@ function Init()
 		plats[1] = new Platform( -90,300,300,50 );
 	}
 	var counter = 0;
-	for( var i = 0; i < map0.length; ++i )
+	for( var i = 0; i < map1.length; ++i )
 	{
-		for( var j = 0; j < map0[i].length; ++j )
+		for( var j = 0; j < map1[i].length; ++j )
 		{
-			if( map0[i][j] === 1 )
+			if( map1[i][j] === 1 )
 				plats[counter++] = new Platform( j * 50,i * 50,50,50 ); // ++ must be after counter so plats[0] exists.
 		}
 	}
