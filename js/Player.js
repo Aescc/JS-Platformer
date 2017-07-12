@@ -2,8 +2,8 @@ class Player
 {
 	constructor( in_gravityAcc )
 	{
-		const WIDTH  = 50;
-		const HEIGHT = 50;
+		const WIDTH  = 35;
+		const HEIGHT = 70;
 		var x = gfx.SCREEN_WIDTH  / 2 - WIDTH  / 2;
 		var y = gfx.SCREEN_HEIGHT / 2 - HEIGHT / 2;
 		const SPEED = 5;
@@ -18,27 +18,35 @@ class Player
 		const SHOOT_MAX = 10; // Lower is faster.
 		var shootDir = 1;
 		var currentBullet = 0;
+		var power = 20;
+		const POWER_MAX = power;
+		var powerAddCounter = 0;
+		const POWER_TIME_MAX = 60;
 		//
 		var Shoot = function()
 		{
-			shootTimer = 0;
-			pBullets[currentBullet].SetDir( shootDir );
-			pBullets[currentBullet].SetPos( x,y + WIDTH / 2 );
-			pBullets[currentBullet].SetMoveStyle( 1 );
-			
-			if( currentBullet < pBullets.length - 1 )
-				++currentBullet;
-			else
-				currentBullet = 0;
-			
-			pBullets[currentBullet].SetDir( shootDir );
-			pBullets[currentBullet].SetPos( x,y );
-			pBullets[currentBullet].SetMoveStyle( 0 );
-			
-			if( currentBullet < pBullets.length - 1 )
-				++currentBullet;
-			else
-				currentBullet = 0;
+			if( shootTimer > SHOOT_MAX )
+			{
+				--power;
+				shootTimer = 0;
+				pBullets[currentBullet].SetDir( shootDir );
+				pBullets[currentBullet].SetPos( x,y + WIDTH / 2 );
+				pBullets[currentBullet].SetMoveStyle( 1 );
+				
+				if( currentBullet < pBullets.length - 1 )
+					++currentBullet;
+				else
+					currentBullet = 0;
+				
+				pBullets[currentBullet].SetDir( shootDir );
+				pBullets[currentBullet].SetPos( x,y );
+				pBullets[currentBullet].SetMoveStyle( 0 );
+				
+				if( currentBullet < pBullets.length - 1 )
+					++currentBullet;
+				else
+					currentBullet = 0;
+			}
 		}
 		var CheckBounds = function()
 		{
@@ -89,9 +97,11 @@ class Player
 			++shootTimer;
 			if( kbd.KeyDown( 74 ) )
 			{
-				if( shootTimer > SHOOT_MAX )
+				if( power > 0 )
+				{
+					canMove = false;
 					Shoot();
-				canMove = false;
+				}
 			}
 			else
 				canMove = true;
@@ -113,12 +123,25 @@ class Player
 				x += currSpeed;
 			if( !jumping )
 				currSpeed *= 0.8;
+			
+			if( powerAddCounter > POWER_TIME_MAX && power < POWER_MAX )
+			{
+				powerAddCounter = 0;
+				++power;
+			}
+			else
+				++powerAddCounter;
+			
 			if( kbd.KeyDown( 75 ) )
 			{
 				jumping = true;
-				if( gravity > JUMP_POWER ) // Enable multi-jumps.
+				if( gravity > JUMP_POWER && power > 0 ) // Enable multi-jumps.
+				{
 					gravity = 0;
+					power -= 2;
+				}
 			}
+			pBar.SetFillAmount( power / POWER_MAX * 100 );
 			if( gravity < 50 )
 				gravity += gravityAcc;
 			y += gravity;

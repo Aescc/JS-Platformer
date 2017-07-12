@@ -18,6 +18,7 @@ var kbd = new Keyboard();
 var ms = new Mouse();
 //
 var player = new Player( gravity );
+var pBar = new PowerBar();
 
 window.onload = function()
 {
@@ -103,6 +104,7 @@ function Draw()
 	for( var i = 0; i < pBullets.length; ++i )
 		pBullets[i].Draw();
 	player.Draw();
+	pBar.Draw();
 }
 
 function MoveAll( xMove,yMove )

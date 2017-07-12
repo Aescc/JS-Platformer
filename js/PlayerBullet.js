@@ -15,6 +15,7 @@ class PlayerBullet
 		this.Update = function()
 		{
 			x += SPEED * dir;
+			// TODO: Fix this movement to look cooler.
 			if( moveStyle )
 				y += Math.sin( x / 20 ) * 8;
 			else
