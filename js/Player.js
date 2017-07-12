@@ -9,7 +9,7 @@ class Player
 		const SPEED = 5;
 		var currSpeed = 0;
 		var canMove = true;
-		var jumping = false;
+		var jumping = true;
 		const JUMP_POWER = 17;
 		var gravity = 0;
 		const gravityAcc = in_gravityAcc;
@@ -70,7 +70,7 @@ class Player
 			x += xDiff;
 			y += yDiff;
 			
-			if( 0 )
+			if( false )
 			{
 				if( xPos < gfx.SCREEN_WIDTH / 2 )
 					MoveAll( 1,0 );
@@ -102,7 +102,7 @@ class Player
 					currSpeed = -SPEED;
 				shootDir = -1;
 			}
-			if( kbd.KeyDown( 68 ) && !jumping )
+			if( kbd.KeyDown( 68 ) )
 			{
 				if( !jumping )
 					currSpeed = SPEED;

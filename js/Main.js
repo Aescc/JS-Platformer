@@ -37,9 +37,19 @@ function Init()
 	ms.Init( gfx.canvas );
 	gfx.SetSmoothing( true ); // Set false for pixel art.
 	document.getElementsByTagName( "title" )[0].innerHTML = "JSJ Framework " + version;
+	if( false )
 	{
 		plats[0] = new Platform( 0,gfx.SCREEN_HEIGHT - 50,gfx.SCREEN_WIDTH,50 );
 		plats[1] = new Platform( -90,300,300,50 );
+	}
+	var counter = 0;
+	for( var i = 0; i < map0.length; ++i )
+	{
+		for( var j = 0; j < map0[i].length; ++j )
+		{
+			if( map0[i][j] === 1 )
+				plats[counter++] = new Platform( j * 50,i * 50,50,50 ); // ++ must be after counter so plats[0] exists.
+		}
 	}
 	
 	for( var i = 0; i < 10; ++i ) // i must be odd.
