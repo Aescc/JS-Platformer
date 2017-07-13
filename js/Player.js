@@ -1,6 +1,6 @@
 class Player
 {
-	constructor( in_gravityAcc )
+	constructor( in_GRAVITY_ACC )
 	{
 		const WIDTH  = 35;
 		const HEIGHT = 70;
@@ -12,7 +12,7 @@ class Player
 		var jumping = true;
 		const JUMP_POWER = 17;
 		var gravity = 0;
-		const gravityAcc = in_gravityAcc;
+		const GRAVITY_ACC = in_GRAVITY_ACC;
 		const OFFSET = WIDTH / 4; // For smooth hit detection, smaller is more accurate.
 		var shootTimer = 0;
 		const SHOOT_MAX = 10; // Lower is faster.
@@ -143,7 +143,7 @@ class Player
 			}
 			pBar.SetFillAmount( power / POWER_MAX * 100 );
 			if( gravity < 50 )
-				gravity += gravityAcc;
+				gravity += GRAVITY_ACC;
 			y += gravity;
 			if( jumping )
 				y -= JUMP_POWER;
@@ -163,6 +163,10 @@ class Player
 		{
 			gravity = 0;
 			jumping = false;
+		}
+		this.AddPower = function( amount )
+		{
+			power += amount;
 		}
 		this.HitTest = function( hitDir,objX,objY,objWidth,objHeight )
 		{
@@ -197,6 +201,15 @@ class Player
 					return true;
 				else
 					return false;
+			}
+		}
+		this.GetPos = function()
+		{
+			return {
+				x:	x,
+				y:	y,
+				w:	WIDTH,
+				h:	HEIGHT
 			}
 		}
 	}

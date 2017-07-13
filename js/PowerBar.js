@@ -2,8 +2,8 @@ class PowerBar
 {
 	constructor()
 	{
-		var x = 10;
-		var y = 10;
+		var x = 5;
+		var y = 5;
 		const WIDTH = 200;
 		const HEIGHT = 10;
 		var fillAmount = 100; // Kind of a percent.
