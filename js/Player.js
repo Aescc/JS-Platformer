@@ -22,6 +22,8 @@ class Player
 		const POWER_MAX = power;
 		var powerAddCounter = 0;
 		const POWER_TIME_MAX = 60;
+		var hurtVX = 0;
+		var hurtVY = 0;
 		//
 		var Shoot = function()
 		{
@@ -141,10 +143,15 @@ class Player
 					power -= 2;
 				}
 			}
+			
+			x += hurtVX;
+			y += hurtVY;
+			
 			pBar.SetFillAmount( power / POWER_MAX * 100 );
 			if( gravity < 50 )
 				gravity += GRAVITY_ACC;
 			y += gravity;
+			
 			if( jumping )
 				y -= JUMP_POWER;
 			CheckBounds();
@@ -163,10 +170,18 @@ class Player
 		{
 			gravity = 0;
 			jumping = false;
+			hurtVX = hurtVY = 0;
 		}
 		this.AddPower = function( amount )
 		{
 			power += amount;
+		}
+		this.Hurt = function( amount,dir )
+		{
+			power -= amount;
+			// TODO: Tweak these to be perfect.
+			hurtVX = calc.Random( 5,7 ) * dir;
+			hurtVY = calc.Random( -19,-13 );
 		}
 		this.HitTest = function( hitDir,objX,objY,objWidth,objHeight )
 		{

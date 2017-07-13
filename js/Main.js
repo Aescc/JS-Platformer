@@ -135,7 +135,10 @@ function Update()
 			enemies[i].GetPos().x,enemies[i].GetPos().y,
 			enemies[i].GetPos().w,enemies[i].GetPos().h ) )
 		{
-			player.AddPower( calc.Random( -10,-5 ) );
+			if( player.GetPos().x > enemies[i].GetPos().x )
+				player.Hurt( calc.Random( 10,5 ),1 );
+			else
+				player.Hurt( calc.Random( 10,5 ),-1 );
 			enemies[i].SetRandPos();
 		}
 	}
