@@ -139,7 +139,7 @@ function Update()
 				player.Hurt( calc.Random( 10,5 ),1 );
 			else
 				player.Hurt( calc.Random( 10,5 ),-1 );
-			enemies[i].SetRandPos();
+			// enemies[i].SetRandPos();
 		}
 	}
 }

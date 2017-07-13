@@ -8,7 +8,12 @@
 <body bgcolor="#333">
 	
 	<canvas id="editor" width="1125" height="825"></canvas>
-	<button onclick="javascript:Download()">Download</button>
+	<div style="float:RIGHT">
+		<button onclick="javascript:Download()">Download</button> <br>
+		<button onclick="javascript:SetTool( 1 )">[B]rush</button><br>
+		<button onclick="javascript:SetTool( 0 )">[E]rase</button><br>
+		<button onclick="javascript:SetTool( 2 )">Spawn Node[1]</button>
+	</div>
 	
 	<script>
 	var c = document.getElementById( "editor" );
@@ -18,7 +23,7 @@
 	var mouse = { x: 0,y: 0 };
 	var drawX = mouse.x;
 	var drawY = mouse.y;
-	var erasing = false;
+	var drawColor = 1;
 	
 	var map = [];
 	for( var i = 0; i < 11 * 3; ++i )
@@ -63,11 +68,6 @@
 			--drawY;
 		if( isDown )
 		{
-			var drawColor = 0;
-			if( !erasing )
-				drawColor = 1;
-			else
-				drawColor = 0;
 			map[drawY / 25][drawX / 25] = drawColor;
 		}
 	}
@@ -82,22 +82,33 @@
 					cc.fillStyle = "#000";
 				else if( map[i][j] === 1 )
 					cc.fillStyle = "#555";
+				else if(  map[i][j] === 2 )
+					cc.fillStyle = "#A0A";
 				cc.fillRect( j * 25,i * 25,25,25 );
 			}
 		}
-		if( !erasing )
-			cc.fillStyle = "#0FF";
-		else
+		if( drawColor === 0 )
 			cc.fillStyle = "#F00";
+		else if( drawColor === 1 )
+			cc.fillStyle = "#0FF";
+		else if( drawColor === 2 )
+			cc.fillStyle = "#A0A";
 		cc.fillRect( drawX,drawY,25,25 );
 	}
 	
 	function KD( e )
 	{
-		if( e.keyCode == 69 )
-			erasing = true;
-		else if( e.keyCode == 66 )
-			erasing = false;
+		switch( e.keyCode )
+		{
+			case 66:
+				drawColor = 1;
+				break;
+			case 69:
+				drawColor = 0;
+				break;
+			case 49:
+				drawColor = 2;
+		}
 	}
 	
 	function Download()
@@ -117,6 +128,11 @@
 		download.setAttribute( 'href','data:text/plain;charset=utf-8,' + encodeURIComponent( downloadData ) );
 		download.download = downloadName + ".js";
 		download.click();
+	}
+	
+	function SetTool( tool )
+	{
+		drawColor = tool;
 	}
 	</script>
 	

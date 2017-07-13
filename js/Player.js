@@ -186,13 +186,16 @@ class Player
 		}
 		this.Hurt = function( amount,dir )
 		{
-			power -= amount;
-			stunned = true;
-			jumping = false;
-			gravity = 0;
-			// TODO: Tweak these to be perfect.
-			hurtVX = calc.Random( 5,7 ) * dir;
-			hurtVY = calc.Random( -19,-13 );
+			if( !stunned )
+			{
+				power -= amount;
+				stunned = true;
+				jumping = false;
+				gravity = 0;
+				// TODO: Tweak these to be perfect.
+				hurtVX = calc.Random( 5,7 ) * dir;
+				hurtVY = calc.Random( -19,-13 );
+			}
 		}
 		this.HitTest = function( hitDir,objX,objY,objWidth,objHeight )
 		{

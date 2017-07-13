@@ -14,6 +14,9 @@ class Enemy
 		var hp = 10;
 		const HP_MAX = hp;
 		const OFFSET = WIDTH / 4;
+		var running = false;
+		var aiSprintTimer = 0;
+		const AI_SPRINT_MAX = 35;
 		//
 		this.Update = function()
 		{
@@ -32,6 +35,21 @@ class Enemy
 				player.AddPower( 10 );
 				hp = HP_MAX;
 				this.SetRandPos();
+			}
+			if( !calc.Random( 0,200 ) )
+				running = true;
+			if( running )
+			{
+				++aiSprintTimer;
+				if( player.GetPos().x > x )
+					aiMoveDir = 1 * 5;
+				else
+					aiMoveDir = -1 * 5;
+			}
+			if( aiSprintTimer > AI_SPRINT_MAX )
+			{
+				aiSprintTimer = 0;
+				running = false;
 			}
 		}
 		this.Draw = function()
