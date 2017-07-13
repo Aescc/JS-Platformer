@@ -36,7 +36,8 @@ class Enemy
 		}
 		this.Draw = function()
 		{
-			gfx.Rect( x,y,WIDTH,HEIGHT,"#F63" );
+			if( IsOnScreen( x,y,WIDTH,HEIGHT ) )
+				gfx.Rect( x,y,WIDTH,HEIGHT,"#F63" );
 		}
 		this.Land = function()
 		{
@@ -49,9 +50,12 @@ class Enemy
 		}
 		this.SetRandPos = function()
 		{
-			const randPos = calc.Random( 0,nodes.length - 1 );
-			x = nodes[randPos].GetPos().x;
-			y = nodes[randPos].GetPos().y;
+			do
+			{
+				const randPos = calc.Random( 0,nodes.length - 1 );
+				x = nodes[randPos].GetPos().x;
+				y = nodes[randPos].GetPos().y;
+			} while( IsOnScreen( x,y,WIDTH,HEIGHT ) );
 		}
 		this.Hurt = function( amount )
 		{

@@ -24,6 +24,7 @@ class Player
 		const POWER_TIME_MAX = 60;
 		var hurtVX = 0;
 		var hurtVY = 0;
+		var stunned = false;
 		//
 		var Shoot = function()
 		{
@@ -97,7 +98,7 @@ class Player
 		{
 			// TODO: Make shooting and jumping take up the same bar.
 			++shootTimer;
-			if( kbd.KeyDown( 74 ) )
+			if( kbd.KeyDown( 74 ) && !stunned )
 			{
 				if( power > 0 )
 				{
@@ -108,13 +109,13 @@ class Player
 			else
 				canMove = true;
 			
-			if( kbd.KeyDown( 65 ) )
+			if( kbd.KeyDown( 65 ) && !stunned )
 			{
 				if( !jumping )
 					currSpeed = -SPEED;
 				shootDir = -1;
 			}
-			if( kbd.KeyDown( 68 ) )
+			if( kbd.KeyDown( 68 ) && !stunned )
 			{
 				if( !jumping )
 					currSpeed = SPEED;
@@ -134,7 +135,7 @@ class Player
 			else
 				++powerAddCounter;
 			
-			if( kbd.KeyDown( 75 ) )
+			if( kbd.KeyDown( 75 ) && !stunned )
 			{
 				jumping = true;
 				if( gravity > JUMP_POWER && power > 0 ) // Enable multi-jumps.
@@ -164,13 +165,20 @@ class Player
 		this.Move = function( xMove,yMove )
 		{
 			x += xMove;
-			y += yMove;
+			if( yMove === 0 )
+			{
+				if( ( xMove < 0 && currSpeed > 0 ) || ( xMove > 0 && currSpeed < 0 ) )
+					currSpeed *= -1;
+			}
+			else
+				y += yMove;
 		}
 		this.Land = function()
 		{
 			gravity = 0;
 			jumping = false;
 			hurtVX = hurtVY = 0;
+			stunned = false;
 		}
 		this.AddPower = function( amount )
 		{
@@ -179,6 +187,9 @@ class Player
 		this.Hurt = function( amount,dir )
 		{
 			power -= amount;
+			stunned = true;
+			jumping = false;
+			gravity = 0;
 			// TODO: Tweak these to be perfect.
 			hurtVX = calc.Random( 5,7 ) * dir;
 			hurtVY = calc.Random( -19,-13 );

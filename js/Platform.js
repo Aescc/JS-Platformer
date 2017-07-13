@@ -9,8 +9,7 @@ class Platform
 		//
 		this.Draw = function()
 		{
-			if( x + WIDTH > 0 && x < gfx.SCREEN_WIDTH &&
-				y + HEIGHT > 0 && y < gfx.SCREEN_HEIGHT )
+			if( IsOnScreen( x,y,WIDTH,HEIGHT ) )
 				gfx.Rect( x,y,WIDTH,HEIGHT,"#555" );
 		}
 		this.Move = function( xMove,yMove )
