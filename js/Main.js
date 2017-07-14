@@ -12,6 +12,7 @@ var plats = [];
 var pBullets = [];
 var enemies = [];
 var nodes = [];
+var exits = [];
 
 // Objects
 var calc = new Calc();
@@ -42,6 +43,7 @@ function Init()
 	document.getElementsByTagName( "title" )[0].innerHTML = "JSJ Framework " + version;
 	var platC = 0;
 	var nodeC = 0;
+	var exitC = 0;
 	for( var i = 0; i < map1.length; ++i )
 	{
 		for( var j = 0; j < map1[i].length; ++j )
@@ -50,6 +52,8 @@ function Init()
 				plats[platC++] = new Platform( j * 50,i * 50,50,50 ); // ++ must be after platC so plats[0] exists.
 			else if( map1[i][j] === 2 )
 				nodes[nodeC++] = new SpawnNode( j * 50,i * 50 );
+			else if( map1[i][j] === 3 )
+				exits[exitC++] = new ExitPath( j * 50,i * 50 );
 		}
 	}
 	for( var i = 0; i < 5; ++i )
