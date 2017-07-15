@@ -98,28 +98,41 @@ class Player
 		{
 			// TODO: Make shooting and jumping take up the same bar.
 			++shootTimer;
-			if( kbd.KeyDown( 74 ) && !stunned )
+			if( !stunned )
 			{
-				if( power > 0 )
+				if( kbd.KeyDown( 74 ) )
 				{
-					canMove = false;
-					Shoot();
+					if( power > 0 )
+					{
+						canMove = false;
+						Shoot();
+					}
 				}
-			}
-			else
-				canMove = true;
+				else
+					canMove = true;
+				
+				if( kbd.KeyDown( 65 ) || kbd.KeyDown( 37 ) )
+				{
+					if( !jumping )
+						currSpeed = -SPEED;
+					shootDir = -1;
+				}
+				if( kbd.KeyDown( 68 ) || kbd.KeyDown( 39 ) )
+				{
+					if( !jumping )
+						currSpeed = SPEED;
+					shootDir = 1;
+				}
 			
-			if( kbd.KeyDown( 65 ) && !stunned )
-			{
-				if( !jumping )
-					currSpeed = -SPEED;
-				shootDir = -1;
-			}
-			if( kbd.KeyDown( 68 ) && !stunned )
-			{
-				if( !jumping )
-					currSpeed = SPEED;
-				shootDir = 1;
+				if( kbd.KeyDown( 75 ) )
+				{
+					jumping = true;
+					if( gravity > JUMP_POWER && power > 0 ) // Enable multi-jumps.
+					{
+						gravity = 0;
+						power -= 2;
+					}
+				}
 			}
 			
 			if( canMove || jumping )
@@ -134,16 +147,6 @@ class Player
 			}
 			else
 				++powerAddCounter;
-			
-			if( kbd.KeyDown( 75 ) && !stunned )
-			{
-				jumping = true;
-				if( gravity > JUMP_POWER && power > 0 ) // Enable multi-jumps.
-				{
-					gravity = 0;
-					power -= 2;
-				}
-			}
 			
 			x += hurtVX;
 			y += hurtVY;

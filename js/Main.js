@@ -3,6 +3,9 @@ const version = "v2.0.0";
 
 // Numbers
 const gravity = 1;
+var totalMoveX = 0;
+var totalMoveY = 0;
+var currMap = 1;
 
 // Booleans
 const isFunny = false;
@@ -41,18 +44,21 @@ function Init()
 	ms.Init( gfx.canvas );
 	gfx.SetSmoothing( true ); // Set false for pixel art.
 	document.getElementsByTagName( "title" )[0].innerHTML = "JSJ Framework " + version;
+	
+	currMap = calc.Random( 0,maps.length - 1 );
+	
 	var platC = 0;
 	var nodeC = 0;
 	var exitC = 0;
-	for( var i = 0; i < map1.length; ++i )
+	for( var i = 0; i < maps[currMap].length; ++i )
 	{
-		for( var j = 0; j < map1[i].length; ++j )
+		for( var j = 0; j < maps[currMap][i].length; ++j )
 		{
-			if( map1[i][j] === 1 )
+			if( maps[currMap][i][j] === 1 )
 				plats[platC++] = new Platform( j * 50,i * 50,50,50 ); // ++ must be after platC so plats[0] exists.
-			else if( map1[i][j] === 2 )
+			else if( maps[currMap][i][j] === 2 )
 				nodes[nodeC++] = new SpawnNode( j * 50,i * 50 );
-			else if( map1[i][j] === 3 )
+			else if( maps[currMap][i][j] === 3 )
 				exits[exitC++] = new ExitPath( j * 50,i * 50 );
 		}
 	}
@@ -145,6 +151,22 @@ function Update()
 				player.Hurt( calc.Random( 10,5 ),-1 );
 			// enemies[i].SetRandPos();
 		}
+		for( var j = 0; j < enemies.length; ++j )
+		{
+			if( calc.HitTest( enemies[i].GetPos().x,enemies[i].GetPos().y,
+				enemies[i].GetPos().w,enemies[i].GetPos().h,
+				enemies[j].GetPos().x,enemies[j].GetPos().y,
+				enemies[j].GetPos().w,enemies[j].GetPos().h ) )
+				var hahaha = false; // enemies[j].SetRandPos();
+		}
+	}
+	for( var i = 0; i < exits.length; ++i )
+	{
+		if( calc.HitTest( player.GetPos().x,player.GetPos().y,
+			player.GetPos().w,player.GetPos().h,
+			exits[i].GetPos().x,exits[i].GetPos().y,
+			exits[i].GetPos().w,exits[i].GetPos().h ) )
+			MapTransition();
 	}
 }
 
@@ -164,6 +186,8 @@ function Draw()
 
 function MoveAll( xMove,yMove )
 {
+	totalMoveX += xMove;
+	totalMoveY += yMove;
 	for( var i = 0; i < plats.length; ++i )
 		plats[i].Move( xMove,yMove );
 	for( var i = 0; i < pBullets.length; ++i )
@@ -172,6 +196,8 @@ function MoveAll( xMove,yMove )
 		enemies[i].Move( xMove,yMove );
 	for( var i = 0; i < nodes.length; ++i )
 		nodes[i].Move( xMove,yMove );
+	for( var i = 0; i < exits.length; ++i )
+		exits[i].Move( xMove,yMove );
 }
 
 function IsOnScreen( objX,objY,objW,objH )
@@ -181,4 +207,14 @@ function IsOnScreen( objX,objY,objW,objH )
 		return true;
 	else
 		return false;
+}
+
+function MapTransition()
+{
+	MoveAll( -totalMoveX,-totalMoveY );
+	do
+	{
+		randMap = calc.Random( 0,maps.length - 1 );
+	} while( randMap === currMap );
+	Init();
 }
