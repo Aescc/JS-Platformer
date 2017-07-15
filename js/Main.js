@@ -160,13 +160,18 @@ function Update()
 				var hahaha = false; // enemies[j].SetRandPos();
 		}
 	}
+	player.ShowKey( false );
 	for( var i = 0; i < exits.length; ++i )
 	{
 		if( calc.HitTest( player.GetPos().x,player.GetPos().y,
 			player.GetPos().w,player.GetPos().h,
 			exits[i].GetPos().x,exits[i].GetPos().y,
 			exits[i].GetPos().w,exits[i].GetPos().h ) )
-			MapTransition();
+			{
+				player.ShowKey( true );
+				if( kbd.KeyDown( 69 ) )
+					MapTransition();
+			}
 	}
 }
 
@@ -176,6 +181,8 @@ function Draw()
 	// Draw things here.
 	for( var i = 0; i < plats.length; ++i )
 		plats[i].Draw();
+	for( var i = 0; i < exits.length; ++i )
+		exits[i].Draw();
 	for( var i = 0; i < enemies.length; ++i )
 		enemies[i].Draw();
 	for( var i = 0; i < pBullets.length; ++i )

@@ -7,6 +7,10 @@ class ExitPath
 		var x = in_x;
 		var y = in_y;
 		//
+		this.Draw = function()
+		{
+			gfx.Rect( x,y,WIDTH,HEIGHT,"#A0A" );
+		}
 		this.Move = function( xMove,yMove )
 		{
 			x += xMove;

@@ -25,6 +25,7 @@ class Player
 		var hurtVX = 0;
 		var hurtVY = 0;
 		var stunned = false;
+		var showingKey = false;
 		//
 		var Shoot = function()
 		{
@@ -164,6 +165,8 @@ class Player
 		this.Draw = function()
 		{
 			gfx.Rect( x,y,WIDTH,HEIGHT,"#AFA" );
+			if( showingKey )
+				gfx.Circle( x + WIDTH / 2,y - HEIGHT / 3,WIDTH / 3,"#FA0" );
 		}
 		this.Move = function( xMove,yMove )
 		{
@@ -199,6 +202,10 @@ class Player
 				hurtVX = calc.Random( 5,7 ) * dir;
 				hurtVY = calc.Random( -19,-13 );
 			}
+		}
+		this.ShowKey = function( willShow )
+		{
+			showingKey = willShow;
 		}
 		this.HitTest = function( hitDir,objX,objY,objWidth,objHeight )
 		{
