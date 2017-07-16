@@ -13,7 +13,7 @@ const isFunny = false;
 // Arrays
 var plats = [];
 var pBullets = [];
-var enemies = [];
+var runners = [];
 var nodes = [];
 var exits = [];
 
@@ -64,8 +64,8 @@ function Init()
 	}
 	for( var i = 0; i < 5; ++i )
 	{
-		enemies[i] = new Runner( gravity );
-		enemies[i].SetRandPos();
+		runners[i] = new Runner( gravity );
+		runners[i].SetRandPos();
 	}
 	
 	for( var i = 0; i < 10; ++i ) // i must be odd.
@@ -96,20 +96,20 @@ function Update()
 			plats[i].GetPos().w,plats[i].GetPos().h ) )
 			player.Move( -1,0 );
 		//
-		for( var j = 0; j < enemies.length; ++j )
+		for( var j = 0; j < runners.length; ++j )
 		{
-			while( enemies[j].HitTest( "Bot",plats[i].GetPos().x,plats[i].GetPos().y,
+			while( runners[j].HitTest( "Bot",plats[i].GetPos().x,plats[i].GetPos().y,
 				plats[i].GetPos().w,plats[i].GetPos().h ) )
 			{
-				enemies[j].Move( 0,-1 );
-				enemies[j].Land();
+				runners[j].Move( 0,-1 );
+				runners[j].Land();
 			}
-			while( enemies[j].HitTest( "Left",plats[i].GetPos().x,plats[i].GetPos().y,
+			while( runners[j].HitTest( "Left",plats[i].GetPos().x,plats[i].GetPos().y,
 				plats[i].GetPos().w,plats[i].GetPos().h ) )
-				enemies[j].Move( 1,0 );
-			while( enemies[j].HitTest( "Right",plats[i].GetPos().x,plats[i].GetPos().y,
+				runners[j].Move( 1,0 );
+			while( runners[j].HitTest( "Right",plats[i].GetPos().x,plats[i].GetPos().y,
 				plats[i].GetPos().w,plats[i].GetPos().h ) )
-				enemies[j].Move( -1,0 );
+				runners[j].Move( -1,0 );
 		}
 	}
 	for( var i = 0; i < pBullets.length; ++i )
@@ -123,41 +123,41 @@ function Update()
 				pBullets[i].GetPos().w,pBullets[i].GetPos().h ) )
 				pBullets[i].Dest();
 		}
-		for( var j = 0; j < enemies.length; ++j )
+		for( var j = 0; j < runners.length; ++j )
 		{
-			if( calc.HitTest( enemies[j].GetPos().x,enemies[j].GetPos().y,
-				enemies[j].GetPos().w,enemies[j].GetPos().h,
+			if( calc.HitTest( runners[j].GetPos().x,runners[j].GetPos().y,
+				runners[j].GetPos().w,runners[j].GetPos().h,
 				pBullets[i].GetPos().x,pBullets[i].GetPos().y,
 				pBullets[i].GetPos().w,pBullets[i].GetPos().h ) )
 			{
-				enemies[j].Hurt( calc.Random( 1,2 ) );
+				runners[j].Hurt( calc.Random( 1,2 ) );
 				pBullets[i].Dest();
 			}
 		}
 	}
-	for( var i = 0; i < enemies.length; ++i )
+	for( var i = 0; i < runners.length; ++i )
 	{
-		if( IsOnScreen( enemies[i].GetPos().x,enemies[i].GetPos().y,
-			enemies[i].GetPos().w,enemies[i].GetPos().h ) )
-			enemies[i].Update();
+		if( IsOnScreen( runners[i].GetPos().x,runners[i].GetPos().y,
+			runners[i].GetPos().w,runners[i].GetPos().h ) )
+			runners[i].Update();
 		if( calc.HitTest( player.GetPos().x,player.GetPos().y,
 			player.GetPos().w,player.GetPos().h,
-			enemies[i].GetPos().x,enemies[i].GetPos().y,
-			enemies[i].GetPos().w,enemies[i].GetPos().h ) )
+			runners[i].GetPos().x,runners[i].GetPos().y,
+			runners[i].GetPos().w,runners[i].GetPos().h ) )
 		{
-			if( player.GetPos().x > enemies[i].GetPos().x )
+			if( player.GetPos().x > runners[i].GetPos().x )
 				player.Hurt( calc.Random( 10,5 ),1 );
 			else
 				player.Hurt( calc.Random( 10,5 ),-1 );
-			// enemies[i].SetRandPos();
+			// runners[i].SetRandPos();
 		}
-		for( var j = 0; j < enemies.length; ++j )
+		for( var j = 0; j < runners.length; ++j )
 		{
-			if( calc.HitTest( enemies[i].GetPos().x,enemies[i].GetPos().y,
-				enemies[i].GetPos().w,enemies[i].GetPos().h,
-				enemies[j].GetPos().x,enemies[j].GetPos().y,
-				enemies[j].GetPos().w,enemies[j].GetPos().h ) )
-				var hahaha = false; // enemies[j].SetRandPos();
+			if( calc.HitTest( runners[i].GetPos().x,runners[i].GetPos().y,
+				runners[i].GetPos().w,runners[i].GetPos().h,
+				runners[j].GetPos().x,runners[j].GetPos().y,
+				runners[j].GetPos().w,runners[j].GetPos().h ) )
+				var hahaha = false; // runners[j].SetRandPos();
 		}
 	}
 	player.ShowKey( false );
@@ -183,8 +183,8 @@ function Draw()
 		plats[i].Draw();
 	for( var i = 0; i < exits.length; ++i )
 		exits[i].Draw();
-	for( var i = 0; i < enemies.length; ++i )
-		enemies[i].Draw();
+	for( var i = 0; i < runners.length; ++i )
+		runners[i].Draw();
 	for( var i = 0; i < pBullets.length; ++i )
 		pBullets[i].Draw();
 	player.Draw();
@@ -199,8 +199,8 @@ function MoveAll( xMove,yMove )
 		plats[i].Move( xMove,yMove );
 	for( var i = 0; i < pBullets.length; ++i )
 		pBullets[i].Move( xMove,yMove );
-	for( var i = 0; i < enemies.length; ++i )
-		enemies[i].Move( xMove,yMove );
+	for( var i = 0; i < runners.length; ++i )
+		runners[i].Move( xMove,yMove );
 	for( var i = 0; i < nodes.length; ++i )
 		nodes[i].Move( xMove,yMove );
 	for( var i = 0; i < exits.length; ++i )
