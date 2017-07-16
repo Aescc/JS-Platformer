@@ -64,7 +64,7 @@ function Init()
 	}
 	for( var i = 0; i < 5; ++i )
 	{
-		enemies[i] = new Enemy( gravity );
+		enemies[i] = new Runner( gravity );
 		enemies[i].SetRandPos();
 	}
 	

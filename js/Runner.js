@@ -1,4 +1,4 @@
-class Enemy // Is a base for other enemies until extends works.
+class Runner
 {
 	constructor( in_gravityAcc )
 	{
@@ -9,11 +9,50 @@ class Enemy // Is a base for other enemies until extends works.
 		var gravity = 0;
 		const GRAVITY_ACC = in_gravityAcc;
 		const OFFSET = WIDTH / 4;
+		var aiMoveDir = calc.Random( -1,1 );
+		var aiMoveTimer = 0;
+		const AI_MOVE_MAX = 20;
+		var hp = 10;
+		const HP_MAX = hp;
+		var running = false;
+		var aiSprintTimer = 0;
+		const AI_SPRINT_MAX = 35;
 		//
 		this.Update = function()
 		{
 			gravity += GRAVITY_ACC;
 			y += gravity;
+			x += aiMoveDir;
+			
+			if( aiMoveTimer > AI_MOVE_MAX )
+			{
+				aiMoveTimer = 0;
+				aiMoveDir = calc.Random( -1,1 );
+			}
+			else
+				++aiMoveTimer;
+			if( hp < 1 )
+			{
+				player.AddPower( 10 );
+				hp = HP_MAX;
+				this.SetRandPos();
+			}
+			
+			if( !calc.Random( 0,200 ) )
+				running = true;
+			if( running )
+			{
+				++aiSprintTimer;
+				if( player.GetPos().x > x )
+					aiMoveDir = 1 * 5;
+				else
+					aiMoveDir = -1 * 5;
+			}
+			if( aiSprintTimer > AI_SPRINT_MAX )
+			{
+				aiSprintTimer = 0;
+				running = false;
+			}
 		}
 		this.Draw = function()
 		{

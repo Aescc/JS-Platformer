@@ -12,7 +12,8 @@
 		<button onclick="javascript:Download()">Download</button> <br>
 		<button onclick="javascript:SetTool( 1 )">[B]rush</button><br>
 		<button onclick="javascript:SetTool( 0 )">[E]rase</button><br>
-		<button onclick="javascript:SetTool( 2 )">Spawn Node[1]</button>
+		<button onclick="javascript:SetTool( 2 )">Spawn Node[1]</button><br>
+		<button onclick="javascript:SetTool( 3 )">Exit Beacon[2]</button>
 	</div>
 	
 	<script>
@@ -83,6 +84,8 @@
 				else if( map[i][j] === 1 )
 					cc.fillStyle = "#555";
 				else if(  map[i][j] === 2 )
+					cc.fillStyle = "#FA0";
+				else if( map[i][j] === 3 )
 					cc.fillStyle = "#A0A";
 				cc.fillRect( j * 25,i * 25,25,25 );
 			}
@@ -92,6 +95,8 @@
 		else if( drawColor === 1 )
 			cc.fillStyle = "#0FF";
 		else if( drawColor === 2 )
+			cc.fillStyle = "#FA0";
+		else if( drawColor === 3 )
 			cc.fillStyle = "#A0A";
 		cc.fillRect( drawX,drawY,25,25 );
 	}
@@ -108,6 +113,10 @@
 				break;
 			case 49:
 				drawColor = 2;
+				break;
+			case 50:
+				drawColor = 3;
+				break;
 		}
 	}
 	

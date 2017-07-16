@@ -164,9 +164,14 @@ class Player
 		}
 		this.Draw = function()
 		{
-			gfx.Rect( x,y,WIDTH,HEIGHT,"#AFA" );
-			if( showingKey )
-				gfx.Circle( x + WIDTH / 2,y - HEIGHT / 3,WIDTH / 3,"#FA0" );
+			if( !stunned )
+			{
+				gfx.Rect( x,y,WIDTH,HEIGHT,"#AFA" );
+				if( showingKey )
+					gfx.Circle( x + WIDTH / 2,y - HEIGHT / 3,WIDTH / 3,"#FA0" );
+			}
+			else
+				gfx.Rect( x - WIDTH / 2,y + HEIGHT / 2,HEIGHT,WIDTH,"#AFA" );
 		}
 		this.Move = function( xMove,yMove )
 		{
