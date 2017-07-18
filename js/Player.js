@@ -9,7 +9,7 @@ class Player
 		const SPEED = 5;
 		var currSpeed = 0;
 		var canMove = true;
-		var jumping = true;
+		var jumping = false;
 		const JUMP_POWER = 17;
 		var gravity = 0;
 		const GRAVITY_ACC = in_GRAVITY_ACC;
@@ -81,23 +81,10 @@ class Player
 			MoveAll( xDiff,yDiff );
 			x += xDiff;
 			y += yDiff;
-			
-			if( false )
-			{
-				if( xPos < gfx.SCREEN_WIDTH / 2 )
-					MoveAll( 1,0 );
-				if( xPos > gfx.SCREEN_WIDTH / 2 )
-					MoveAll( -1,0 );
-				if( yPos < gfx.SCREEN_HEIGHT / 2 )
-					MoveAll( 0,1 );
-				if( yPos > gfx.SCREEN_HEIGHT / 2 )
-					MoveAll( 0,-1 );
-			}
 		}
 		//
 		this.Update = function()
 		{
-			// TODO: Make shooting and jumping take up the same bar.
 			++shootTimer;
 			if( !stunned )
 			{
@@ -114,15 +101,15 @@ class Player
 				
 				if( kbd.KeyDown( 65 ) || kbd.KeyDown( 37 ) )
 				{
+					shootDir = -1;
 					if( !jumping )
 						currSpeed = -SPEED;
-					shootDir = -1;
 				}
 				if( kbd.KeyDown( 68 ) || kbd.KeyDown( 39 ) )
 				{
+					shootDir = 1;
 					if( !jumping )
 						currSpeed = SPEED;
-					shootDir = 1;
 				}
 			
 				if( kbd.KeyDown( 75 ) )
@@ -138,6 +125,7 @@ class Player
 			
 			if( canMove || jumping )
 				x += currSpeed;
+			
 			if( !jumping )
 				currSpeed *= 0.8;
 			
@@ -153,12 +141,23 @@ class Player
 			y += hurtVY;
 			
 			pBar.SetFillAmount( power / POWER_MAX * 100 );
+			
 			if( gravity < 50 )
 				gravity += GRAVITY_ACC;
+			
 			y += gravity;
 			
 			if( jumping )
 				y -= JUMP_POWER;
+			
+			if( power < 1 )
+			{
+				power = POWER_MAX;
+				stunned = false;
+				hurtVX = hurtVY = 0;
+				MapTransition();
+			}
+			
 			CheckBounds();
 			MoveScreen();
 		}
