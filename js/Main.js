@@ -2,20 +2,21 @@
 const version = "v2.0.0";
 
 // Numbers
-const gravity = 1;
+const gravity  = 1;
 var totalMoveX = 0;
 var totalMoveY = 0;
-var currMap = 1;
+var currMap    = 0;
 
 // Booleans
 const isFunny = false;
 
 // Arrays
-var plats = [];
+var plats =    [];
 var pBullets = [];
-var runners = [];
-var nodes = [];
-var exits = [];
+var runners =  [];
+var throwers = [];
+var nodes =    [];
+var exits =    [];
 
 // Objects
 var calc = new Calc();
@@ -62,10 +63,17 @@ function Init()
 				exits[exitC++] = new ExitPath( j * 50,i * 50 );
 		}
 	}
+	
 	for( var i = 0; i < 5; ++i )
 	{
 		runners[i] = new Runner( gravity );
 		runners[i].SetRandPos();
+	}
+	
+	for( var i = 0; i < 2; ++i )
+	{
+		throwers[i] = new Thrower( gravity );
+		throwers[i].SetRandPos();
 	}
 	
 	for( var i = 0; i < 10; ++i ) // i must be odd.
@@ -116,6 +124,22 @@ function Update()
 				plats[i].GetPos().w,plats[i].GetPos().h ) )
 				runners[j].Move( -1,0 );
 		}
+		
+		for( var j = 0; j < throwers.length; ++j )
+		{
+			while( throwers[j].HitTest( "Bot",plats[i].GetPos().x,plats[i].GetPos().y,
+				plats[i].GetPos().w,plats[i].GetPos().h ) )
+			{
+				throwers[j].Move( 0,-1 );
+				throwers[j].Land();
+			}
+			while( throwers[j].HitTest( "Left",plats[i].GetPos().x,plats[i].GetPos().y,
+				plats[i].GetPos().w,plats[i].GetPos().h ) )
+				throwers[j].Move( 1,0 );
+			while( throwers[j].HitTest( "Right",plats[i].GetPos().x,plats[i].GetPos().y,
+				plats[i].GetPos().w,plats[i].GetPos().h ) )
+				throwers[j].Move( -1,0 );
+		}
 	}
 	for( var i = 0; i < pBullets.length; ++i )
 	{
@@ -140,6 +164,7 @@ function Update()
 			}
 		}
 	}
+	
 	for( var i = 0; i < runners.length; ++i )
 	{
 		if( IsOnScreen( runners[i].GetPos().x,runners[i].GetPos().y,
@@ -165,6 +190,32 @@ function Update()
 				var hahaha = false; // runners[j].SetRandPos();
 		}
 	}
+	
+	for( var i = 0; i < throwers.length; ++i )
+	{
+		if( IsOnScreen( throwers[i].GetPos().x,throwers[i].GetPos().y,
+			throwers[i].GetPos().w,throwers[i].GetPos().h ) )
+			throwers[i].Update();
+		if( calc.HitTest( player.GetPos().x,player.GetPos().y,
+			player.GetPos().w,player.GetPos().h,
+			throwers[i].GetPos().x,throwers[i].GetPos().y,
+			throwers[i].GetPos().w,throwers[i].GetPos().h ) )
+		{
+			if( player.GetPos().x > throwers[i].GetPos().x )
+				player.Hurt( calc.Random( 2,5 ),1 );
+			else
+				player.Hurt( calc.Random( 2,5 ),-1 );
+		}
+		for( var j = 0; j < throwers.length; ++j )
+		{
+			if( calc.HitTest( throwers[i].GetPos().x,throwers[i].GetPos().y,
+				throwers[i].GetPos().w,throwers[i].GetPos().h,
+				throwers[j].GetPos().x,throwers[j].GetPos().y,
+				throwers[j].GetPos().w,throwers[j].GetPos().h ) )
+				var hahaha = false;
+		}
+	}
+	
 	player.ShowKey( false );
 	for( var i = 0; i < exits.length; ++i )
 	{
@@ -190,6 +241,8 @@ function Draw()
 		exits[i].Draw();
 	for( var i = 0; i < runners.length; ++i )
 		runners[i].Draw();
+	for( var i = 0; i < throwers.length; ++i )
+		throwers[i].Draw();
 	for( var i = 0; i < pBullets.length; ++i )
 		pBullets[i].Draw();
 	player.Draw();
@@ -206,6 +259,8 @@ function MoveAll( xMove,yMove )
 		pBullets[i].Move( xMove,yMove );
 	for( var i = 0; i < runners.length; ++i )
 		runners[i].Move( xMove,yMove );
+	for( var i = 0; i < throwers.length; ++i )
+		throwers[i].Move( xMove,yMove );
 	for( var i = 0; i < nodes.length; ++i )
 		nodes[i].Move( xMove,yMove );
 	for( var i = 0; i < exits.length; ++i )

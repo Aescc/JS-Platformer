@@ -35,11 +35,26 @@ class Thrower
 				hp = HP_MAX;
 				this.SetRandPos();
 			}
+			
+			if( !calc.Random( 0,200 ) )
+			{
+				var bulletToUse = 0;
+				do
+				{
+					bulletToUse = calc.Random( 0,enemyBullets.length - 1 );
+				}
+				while( !bulletToUse.GetUsable() );
+				if( player.GetPos().x > x )
+					enemyBullets[bulletToUse].SetPos( x,y,calc.Random( 5,10 ) );
+				else
+					enemyBullets[bulletToUse].SetPos( x,y,calc.Random( -5,-10 ) );
+			}
+			enemyBullets[calc.Random( 0,enemyBullets.length - 1 )].SetPos( x,y,
 		}
 		this.Draw = function()
 		{
 			if( IsOnScreen( x,y,WIDTH,HEIGHT ) )
-				gfx.Rect( x,y,WIDTH,HEIGHT,"#F63" );
+				gfx.Rect( x,y,WIDTH,HEIGHT,"#6F3" );
 		}
 		this.Land = function()
 		{
