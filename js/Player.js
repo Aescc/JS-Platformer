@@ -9,6 +9,7 @@ class Player
 		const SPEED = 5;
 		var currSpeed = 0;
 		var canMove = true;
+		var canJump = false;
 		var jumping = false;
 		const JUMP_POWER = 17;
 		var gravity = 0;
@@ -25,6 +26,8 @@ class Player
 		var hurtVX = 0;
 		var hurtVY = 0;
 		var stunned = false;
+		var stunCounter = 0;
+		const STUN_MAX = 100; // How long you stay on the ground after being hit.
 		var showingKey = false;
 		//
 		var Shoot = function()
@@ -112,7 +115,7 @@ class Player
 						currSpeed = SPEED;
 				}
 			
-				if( kbd.KeyDown( 75 ) )
+				if( kbd.KeyDown( 75 ) && canJump )
 				{
 					jumping = true;
 					if( gravity > JUMP_POWER && power > 0 ) // Enable multi-jumps.
@@ -121,6 +124,16 @@ class Player
 						power -= 2;
 					}
 				}
+			}
+			else
+			{
+				if( stunCounter > STUN_MAX )
+				{
+					stunCounter = 0;
+					stunned = false;
+				}
+				else
+					++stunCounter;
 			}
 			
 			if( canMove || jumping )
@@ -187,8 +200,14 @@ class Player
 		{
 			gravity = 0;
 			jumping = false;
+			canJump = true;
 			hurtVX = hurtVY = 0;
-			stunned = false;
+		}
+		this.Fall = function()
+		{
+			canJump = false;
+			jumping = false;
+			gravity = 0;
 		}
 		this.AddPower = function( amount )
 		{
