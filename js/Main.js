@@ -89,9 +89,11 @@ function Update()
 		while( player.HitTest( "Top",plats[i].GetPos().x,plats[i].GetPos().y,
 			plats[i].GetPos().w,plats[i].GetPos().h ) )
 			player.Move( 0,1 );
+			
 		while( player.HitTest( "Left",plats[i].GetPos().x,plats[i].GetPos().y,
 			plats[i].GetPos().w,plats[i].GetPos().h ) )
 			player.Move( 1,0 );
+			
 		while( player.HitTest( "Right",plats[i].GetPos().x,plats[i].GetPos().y,
 			plats[i].GetPos().w,plats[i].GetPos().h ) )
 			player.Move( -1,0 );
