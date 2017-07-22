@@ -222,8 +222,11 @@ class Player
 				jumping = false;
 				gravity = 0;
 				// TODO: Tweak these to be perfect.
-				hurtVX = calc.Random( 5,7 ) * dir;
-				hurtVY = calc.Random( -19,-13 );
+				if( dir !== 0 )
+				{
+					hurtVX = calc.Random( 5,7 ) * dir;
+					hurtVY = calc.Random( -19,-13 );
+				}
 			}
 		}
 		this.ShowKey = function( willShow )

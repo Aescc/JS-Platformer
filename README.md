@@ -1,7 +1,7 @@
 # JS-Platformer
 Platformer in JS!
-= TODO:
--Graphics(duh).
--Enemy that shoots.
--Bosses(?)
--Items(?)
+## TODO:
+### Graphics(duh).
+### Make thrower enemy aim for the player somehow.
+### Bosses(?)
+### Items(?)

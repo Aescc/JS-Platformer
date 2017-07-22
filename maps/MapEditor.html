@@ -6,14 +6,16 @@
 </head>
 
 <body bgcolor="#333">
-	
 	<canvas id="editor" width="1125" height="825"></canvas>
 	<div style="float:RIGHT">
-		<button onclick="javascript:Download()">Download</button> <br>
+		<input id="mapNum" type="text" placeholder="Map Num">
+		<button onclick="javascript:Download()">Download</button><br>
 		<button onclick="javascript:SetTool( 1 )">[B]rush</button><br>
 		<button onclick="javascript:SetTool( 0 )">[E]rase</button><br>
 		<button onclick="javascript:SetTool( 2 )">Spawn Node[1]</button><br>
-		<button onclick="javascript:SetTool( 3 )">Exit Beacon[2]</button>
+		<button onclick="javascript:SetTool( 3 )">Exit Beacon[2]</button><br>
+		<input id="runnerNum" type="text" placeholder="Number of Runners"><br>
+		<input id="throwerNum" type="text" placeholder="Number of Throwers">
 	</div>
 	
 	<script>
@@ -123,7 +125,8 @@
 	function Download()
 	{
 		const downloadName = "Map";
-		var downloadData = "var map =\n[\n";
+		var mapNum = document.getElementById( "mapNum" ).value;
+		var downloadData = "maps[" + mapNum + "] =\n[\n";
 		for( var i = 0; i < 11 * 3; ++i )
 		{
 			downloadData += "\t[ ";
@@ -132,10 +135,14 @@
 			downloadData += " ],\n";
 		}
 		downloadData = downloadData.substring( 0,downloadData.length - 2 );
-		downloadData += "\n];";
+		downloadData += "\n];\n";
+		
+		downloadData += "maps["   + mapNum + "].numRunners = "  + document.getElementById( "runnerNum"  ).value + ";\n";
+		downloadData += "\nmaps[" + mapNum + "].numThrowers = " + document.getElementById( "throwerNum" ).value + ";\n";
+		
 		var download = document.createElement( "a" );
 		download.setAttribute( 'href','data:text/plain;charset=utf-8,' + encodeURIComponent( downloadData ) );
-		download.download = downloadName + ".js";
+		download.download = downloadName + mapNum + ".js";
 		download.click();
 	}
 	
@@ -144,6 +151,5 @@
 		drawColor = tool;
 	}
 	</script>
-	
 </body>
 </html>

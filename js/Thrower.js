@@ -12,6 +12,8 @@ class Thrower
 		var aiMoveDir = calc.Random( -1,1 );
 		var aiMoveTimer = 0;
 		const AI_MOVE_MAX = 20;
+		var throwTimer = 0;
+		var THROW_MAX = calc.Random( 20,120 );
 		var hp = 10;
 		const HP_MAX = hp;
 		//
@@ -36,20 +38,23 @@ class Thrower
 				this.SetRandPos();
 			}
 			
-			if( !calc.Random( 0,200 ) )
+			if( throwTimer > THROW_MAX )
 			{
+				THROW_MAX = calc.Random( 20,120 );
+				throwTimer = 0;
 				var bulletToUse = 0;
 				do
 				{
 					bulletToUse = calc.Random( 0,enemyBullets.length - 1 );
 				}
-				while( !bulletToUse.GetUsable() );
+				while( !enemyBullets[bulletToUse].GetUsable() );
 				if( player.GetPos().x > x )
 					enemyBullets[bulletToUse].SetPos( x,y,calc.Random( 5,10 ) );
 				else
 					enemyBullets[bulletToUse].SetPos( x,y,calc.Random( -5,-10 ) );
 			}
-			enemyBullets[calc.Random( 0,enemyBullets.length - 1 )].SetPos( x,y,
+			else
+				++throwTimer;
 		}
 		this.Draw = function()
 		{
