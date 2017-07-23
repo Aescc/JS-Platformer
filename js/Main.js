@@ -238,6 +238,19 @@ function Update()
 			else
 				player.Hurt( calc.Random( 2,5 ),-1 );
 		}
+		
+		for( var j = 0; j < pBullets.length; ++j )
+		{
+			if( calc.HitTest( throwers[i].GetPos().x,throwers[i].GetPos().y,
+				throwers[i].GetPos().w,throwers[i].GetPos().h,
+				pBullets[j].GetPos().x,pBullets[j].GetPos().y,
+				pBullets[j].GetPos().w,pBullets[j].GetPos().h ) )
+			{
+				pBullets[j].Dest();
+				throwers[i].Hurt( calc.Random( 1,2 ) );
+			}
+		}
+		
 		for( var j = 0; j < throwers.length; ++j )
 		{
 			if( calc.HitTest( throwers[i].GetPos().x,throwers[i].GetPos().y,
