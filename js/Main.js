@@ -2,10 +2,13 @@
 const version = "v2.0.0";
 
 // Numbers
-const gravity  = 1;
-var totalMoveX = 0;
-var totalMoveY = 0;
-var currMap    = 0;
+const gravity          = 1;
+var totalMoveX         = 0;
+var totalMoveY         = 0;
+var currMap            = 0;
+const SCREEN_SHAKE_MAX = 30;
+var screenShakeTimer   = SCREEN_SHAKE_MAX;
+const SHAKE_AMOUNT = 15;
 
 // Booleans
 const isFunny = false;
@@ -21,9 +24,9 @@ var exits        = [];
 
 // Objects
 var calc = new Calc();
-var gfx = new Graphics();
-var kbd = new Keyboard();
-var ms = new Mouse();
+var gfx  = new Graphics();
+var kbd  = new Keyboard();
+var ms   = new Mouse();
 //
 var player = new Player( gravity );
 var pBar = new PowerBar();
@@ -255,8 +258,17 @@ function Update()
 			{
 				player.ShowKey( true );
 				if( kbd.KeyDown( 69 ) )
+				{
+					player.FillPower();
 					MapTransition();
+				}
 			}
+	}
+	
+	if( screenShakeTimer < SCREEN_SHAKE_MAX )
+	{
+		++screenShakeTimer;
+		MoveAll( calc.Random( -SHAKE_AMOUNT,SHAKE_AMOUNT ),calc.Random( -SHAKE_AMOUNT,SHAKE_AMOUNT ) );
 	}
 }
 
@@ -315,6 +327,7 @@ function MapTransition()
 	do
 	{
 		randMap = calc.Random( 0,maps.length - 1 );
-	} while( randMap === currMap );
+	}
+	while( randMap === currMap );
 	Init();
 }

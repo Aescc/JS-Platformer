@@ -213,6 +213,10 @@ class Player
 		{
 			power += amount;
 		}
+		this.FillPower = function()
+		{
+			power = POWER_MAX;
+		}
 		this.Hurt = function( amount,dir )
 		{
 			if( !stunned )
@@ -221,12 +225,15 @@ class Player
 				stunned = true;
 				jumping = false;
 				gravity = 0;
+				
 				// TODO: Tweak these to be perfect.
 				if( dir !== 0 )
 				{
 					hurtVX = calc.Random( 5,7 ) * dir;
 					hurtVY = calc.Random( -19,-13 );
 				}
+				
+				screenShakeTimer = 0;
 			}
 		}
 		this.ShowKey = function( willShow )
@@ -276,6 +283,10 @@ class Player
 				w:	WIDTH,
 				h:	HEIGHT
 			}
+		}
+		this.GetStunned = function()
+		{
+			return stunned;
 		}
 	}
 }

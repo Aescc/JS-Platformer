@@ -38,7 +38,7 @@ class Runner
 				this.SetRandPos();
 			}
 			
-			if( !calc.Random( 0,200 ) )
+			if( !calc.Random( 0,200 ) && !player.GetStunned() )
 				running = true;
 			if( running )
 			{
