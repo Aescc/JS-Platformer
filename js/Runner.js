@@ -70,12 +70,13 @@ class Runner
 		}
 		this.SetRandPos = function()
 		{
-			do
+			// do
 			{
 				const randPos = calc.Random( 0,nodes.length - 1 );
 				x = nodes[randPos].GetPos().x;
 				y = nodes[randPos].GetPos().y;
-			} while( IsOnScreen( x,y,WIDTH,HEIGHT ) );
+			}
+			// while( IsOnScreen( x,y,WIDTH,HEIGHT ) );
 		}
 		this.Hurt = function( amount )
 		{
